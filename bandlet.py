@@ -14,13 +14,20 @@ ft = np.fft.fft2(img)
 ft = np.fft.fftshift(ft)
 ft_img = np.log10(np.abs(ft))
 
+''' Used to mask lower frequencies in the ft. Creates boolean array of image size.
+    It's a simple distance field check - if the image[i,j] is inside the area 
+    of defined circle it returns boolean_mask[i,j] = True '''
+
 def circular_mask(img_width, img_height, mask_radius):
     x, y = np.ogrid[:img_width, :img_height]
-    distance_field = np.sqrt((x - round(0.5*img_width, ndigits=None))**2 + (y-round(0.5*img_height, ndigits=None))**2)
-    print(distance_field)
+    distance_field = np.sqrt((x - round(0.5*img_width, ndigits=None))**2 + 
+                             (y - round(0.5*img_height, ndigits=None))**2)
     circular_mask = distance_field <= mask_radius
     return circular_mask
 
-img_width, img_height, radius = 8,8,2
-mask = circular_mask(img_width, img_height, radius)
-print(mask)
+def triangular_mask(img_width, img_height, mask_angle):
+    x, y = np.ogrid[:img_width, :img_height]
+    distance_field = np.abs(mask_angle * (x - round(0.5*img_width, ndigits=None)))
+    triangular_mask = (distance_field >= (y - round(0.5*img_height, ndigits=None)) & 
+                      (~distance_field <= (y - round(0.5*img_height, ndigits=None)))
+    return triangular_mask
