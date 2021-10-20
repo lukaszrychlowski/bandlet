@@ -25,7 +25,6 @@ def circular_mask(img_width, img_height, mask_radius):
                              (y - round(0.5*img_height, ndigits=None))**2)
     circular_mask = distance_field <= mask_radius
     return circular_mask
-
 def triangular_mask(img_width, img_height, mask_angle):
     x, y = np.ogrid[:img_width, :img_height]
     distance_field = np.abs(mask_angle * (x - round(0.5*img_width, ndigits=None)))
@@ -37,7 +36,6 @@ def triangular_mask(img_width, img_height, mask_angle):
     is transformed by rotation to (x',y'). Calculated px coords are most often subpixel values, 
     they're rounded to int. It creates holes inside a mask, so another iteration over array is done 
     to fill the gaps. '''
-
 def rotation(img_width, img_height, rotation_angle):
     rotation_matrix = maths.rotation_matrix(rotation_angle)
     translation_matrix = maths.translation_matrix(img_width, img_height)
