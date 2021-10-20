@@ -1,4 +1,5 @@
 import numpy as np
+import maths
 from PIL import Image
 
 def triangular_mask(img_width, img_height, mask_angle):
