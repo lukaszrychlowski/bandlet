@@ -1,8 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from numpy.fft.helper import ifftshift
 import maths
-from PIL import Image 
 
 ''' Generate the image array based on data from path, get its size. '''
 path = '/Users/ryszard/Desktop/pattern_fcc_02.txt'
@@ -69,8 +67,9 @@ def rotation(img_width, img_height, rotation_angle):
     return rotated_triangular_mask
 
 ''' Create both mask arrays with given array size and angle/radius, make a copy of img and apply masks to it. '''
-triangular_mask = triangular_mask(img_width, img_height, 5)
+triangular_mask = triangular_mask(img_width, img_height, 8)
 circular_mask = circular_mask(img_width, img_height, 10)
+rotation_angle = 20
 rotated_triangular_mask = rotation(img_width, img_height, rotation_angle)
 masked_ft = np.copy(ft)
 masked_ft[rotated_triangular_mask] = 0
