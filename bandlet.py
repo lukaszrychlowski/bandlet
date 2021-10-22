@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from numpy.fft.helper import ifftshift
 import maths
 from PIL import Image 
 
@@ -67,21 +68,22 @@ def rotation(img_width, img_height, rotation_angle):
 
     return rotated_triangular_mask
 
-'''Create both mask arrays with given array size and angle/radius, make a copy of img and apply masks to it.'''
-triangular_mask = triangular_mask(img_width, img_height, 10)
+''' Create both mask arrays with given array size and angle/radius, make a copy of img and apply masks to it. '''
+triangular_mask = triangular_mask(img_width, img_height, 5)
 circular_mask = circular_mask(img_width, img_height, 10)
-
-rotation_angle = 45
-
 rotated_triangular_mask = rotation(img_width, img_height, rotation_angle)
-masked_ft = np.copy(ft_img)
+masked_ft = np.copy(ft)
 masked_ft[rotated_triangular_mask] = 0
 masked_ft[circular_mask] = 0
-print(img.shape)
-print(triangular_mask.shape)
-print(rotated_triangular_mask.shape)
-#im = Image.fromarray(masked_ft)
-#im.show()
-plt.imshow(masked_ft)
-plt.show()
 
+''' Image substraction. '''
+result_img = np.fft.ifftshift(ft - masked_ft)
+result_img = np.fft.ifft2(result_img)
+result_img = np.abs(result_img)
+
+''' Plot and save it as an img. '''
+plt.subplot(121), plt.imshow(img), plt.axis('off')
+plt.subplot(122), plt.imshow(result_img), plt.axis('off')
+plt.tight_layout()
+plt.savefig('/Users/ryszard/Desktop/bandlet/' + str(rotation_angle) + 'png')
+plt.close()
